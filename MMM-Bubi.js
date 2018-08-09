@@ -9,9 +9,17 @@
 Module.register('MMM-Bubi', {
   defaults: {
     updateInterval: 600000,
-    placeId: 248398,
     showPlaceName: true,
-    placeName: ''
+    align: 'left',
+    places: [
+      { id: 1758935, name: 'MOMKult' },
+      { id: 1758923, name: 'MOM Park' },
+      { id: 366538, name: 'BAH csomópont' }
+    ]
+  },
+
+  viewModel: {
+    places: []
   },
 
   requiresVersion: '2.1.0',
@@ -24,7 +32,6 @@ Module.register('MMM-Bubi', {
 
   start() {
     const self = this;
-    this.viewModel = null;
     this.hasData = false;
 
     this._getData(() => self.updateDom());
@@ -38,24 +45,42 @@ Module.register('MMM-Bubi', {
     const wrapper = document.createElement('div');
 
     if (this.viewModel) {
-      const firstLine = document.createElement('div');
+      const tableEl = document.createElement('table');
+      tableEl.classList = 'small';
 
-      const symbolEl = document.createElement('span');
-      symbolEl.classList = 'fa fa-bicycle dimmed symbol';
-      firstLine.appendChild(symbolEl);
-
-      const countEl = document.createElement('span');
-      countEl.innerText = this.viewModel.numberOfBikes;
-      firstLine.appendChild(countEl);
-
-      wrapper.appendChild(firstLine);
-
-      if (this.config.showPlaceName) {
-        const secondLine = document.createElement('div');
-        secondLine.classList = 'dimmed small';
-        secondLine.innerText = this.config.placeName ? this.config.placeName : this.viewModel.officalPlaceName;
-        wrapper.appendChild(secondLine);
+      if (this.config.align === 'left') {
+        tableEl.classList += ' align-left';
       }
+
+      if (this.config.align === 'right') {
+        tableEl.classList += ' align-right';
+      }
+
+      this.viewModel.places.forEach((place) => {
+        const rowEl = document.createElement('tr');
+
+        const symbolEl = document.createElement('td');
+        symbolEl.classList = 'fa fa-bicycle dimmed symbol-cell';
+        rowEl.appendChild(symbolEl);
+
+        const countEl = document.createElement('td');
+        countEl.classList = 'count-cell';
+        countEl.innerText = place.numberOfBikes;
+        rowEl.appendChild(countEl);
+
+        const nameEl = document.createElement('td');
+        nameEl.classList = 'dimmed small name-cell';
+        nameEl.innerText = place.name;
+        rowEl.appendChild(nameEl);
+
+        tableEl.appendChild(rowEl);
+      });
+
+      wrapper.appendChild(tableEl);
+
+      const clearfixEl = document.createElement('div');
+      clearfixEl.classList = 'clearfix';
+      wrapper.appendChild(clearfixEl);
     } else {
       const loadingEl = document.createElement('span');
       loadingEl.innerHTML = this.translate('LOADING');
@@ -91,12 +116,16 @@ Module.register('MMM-Bubi', {
     const response = JSON.parse(responseBody);
 
     const places = response.countries[0].cities[0].places;
-    const place = places.find(p => p.uid === this.config.placeId);
 
-    this.viewModel = {
-      officalPlaceName: place.name,
-      numberOfBikes: place.bikes
-    };
+    for (let i = 0; i < this.config.places.length; i++) {
+      const place = places.find(p => p.uid === this.config.places[i].id);
+      this.viewModel.places.push({
+        name: this.config.showPlaceName
+          ? this.config.places[i].name || place.name
+          : null,
+        numberOfBikes: place.bikes
+      });
+    }
 
     if (!this.hasData) {
       this.updateDom();

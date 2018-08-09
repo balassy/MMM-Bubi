@@ -1,6 +1,6 @@
 {
   "name": "MMM-Bubi",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "MagicMirror module that displays bike availability in the Budapest public bike System (aka MOL Bubi).",
   "main": "MMM-Bubi.js",
   "author": "György Balássy",

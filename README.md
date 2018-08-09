@@ -1,22 +1,20 @@
 # MMM-Bubi
 
-This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/) to display the number of available bikes on a particular station of the Budapest public bike system (aka MOL Bubi).
+This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/) to display the number of available bikes on the selected stations of the Budapest public bike system (aka MOL Bubi).
 
 ## Features
 
-By default this module displays the number of available bikes and the official name of the specified station:
+By default this module displays the number of available bikes and the official names of the specified stations:
 
-![](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-default.png)
+![Default](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-default.png)
 
-You can configure the module to display a custom (typically shorter) name for the station:
+You can configure the module to display a custom (typically shorter) names for the stations:
 
-![](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-custom-place-name.png)
+![With custom station names](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-custom-place-name.png)
 
-If you wish, you can completely remove the station name:
+If you wish, you can completely remove the station names:
 
-![](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-no-place-name.png)
-
-This module is capable to display the bike availability only for a single station. If you would like to see the number of bikes for multiple stations, add this module multiple times.
+![With hidden station names](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-no-place-name.png)
 
 For updates, please check the [CHANGELOG](https://github.com/balassy/MMM-Bubi/blob/master/CHANGELOG.md).
 
@@ -40,9 +38,13 @@ var config = {
       position: 'top_right',
       config: {
         updateInterval: 600000, // 10 minutes in milliseconds
-        placeId: 248398,
         showPlaceName: true,
-        placeName: ''
+        align: 'left',
+        places: [
+          { id: 1758935, name: 'MOMKult' },
+          { id: 1758923, name: 'MOM Park' },
+          { id: 366538,  name: 'BAH csomópont' }
+        ]
       }
     }
   ]
@@ -51,7 +53,30 @@ var config = {
 
 ## Configuration options
 
-Coming soon...
+| Option                 | Description
+|------------------------|-----------
+| `places`               | **REQUIRED** The list of Bubi stations to display. The unique `id` of the station is used to lookup the data from the webservice. The `name` is optional, and can be used to display a custom name for the station instead of the official name if the `showPlaceName` option is set to `true`. <br><br> **Type:** `Array<{ id: number, name: string }>` <br>**Default value:** 3 preconfigured stations
+| `showPlaceName`        | *Optional* Specifies whether the module should display not only the number of available bikes for each station, but also the names of the stations. If the `name` property is set in the `places` array, then it will be displayed, otherwise the official names of the stations will be rendered onto the Mirror.<br><br> **Type:** `boolean` <br>**Default value:** `true`
+| `align`                | *Optional* Determines how the text is aligned within the module. Set this to `left` if the module is displayed on left side of the mirror, or to `right` if you positioned this module to the right column of the mirror.<br><br>**Type:** `string`<br>**Possible values**: `'left'` or `'right'`<br>**Default value:** `'left'`
+| `updateInterval`       | *Optional* The frequency of how often the module should query the number of available bikes from the webservice. <br><br>**Type:** `int` (milliseconds) <br>**Default value:** `600000` milliseconds (10 minutes)
+
+## How to get the place ID
+
+In the `id` property of the objects in the `places` array of the configuration settings you have to specify the unique identifier of the station for which the module should display the bike availability.
+
+To obtain the unique identifier of the station, follow these steps:
+
+1. Navigate to the [MOL Bubi homepage](https://molbubi.bkk.hu/) with your favorite webbrowser.
+
+2. Use the map on the page to find your favorite MOL Bubi station and click its icon.
+
+3. Note the official name of the station, e.g. `1201-BAH csomópont`.
+
+4. Navigate to the https://bubi.nextbike.net/maps/nextbike-live.xml?&domains=mb URL and use the browser's find function (CTRL+F) to locate the place by its name.
+
+![Locate the station by its name](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/find-place-id.png)
+
+5. Find the `uid` attribute in the same row, it is the unique identifier of the station.
 
 ## How it works
 
