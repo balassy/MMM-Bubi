@@ -117,6 +117,8 @@ Module.register('MMM-Bubi', {
 
     const places = response.countries[0].cities[0].places;
 
+    this.viewModel.places = [];
+
     for (let i = 0; i < this.config.places.length; i++) {
       const place = places.find(p => p.uid === this.config.places[i].id);
       this.viewModel.places.push({
