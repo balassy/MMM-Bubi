@@ -41,9 +41,9 @@ var config = {
         showPlaceName: true,
         align: 'left',
         places: [
-          { id: 1758935, name: 'MOMKult' },
-          { id: 1758923, name: 'MOM Park' },
-          { id: 366538,  name: 'BAH csomópont' }
+          { id: 42990755, name: 'MOMKult' },
+          { id: 42990754, name: 'MOM Park' },
+          { id: 42990729,  name: 'BAH csomópont' }     
         ]
       }
     }
@@ -66,13 +66,13 @@ In the `id` property of the objects in the `places` array of the configuration s
 
 To obtain the unique identifier of the station, follow these steps:
 
-1. Navigate to the [MOL Bubi homepage](https://molbubi.bkk.hu/) with your favorite webbrowser.
+1. Navigate to the [MOL Bubi homepage](https://molbubi.hu/hu/terkep/) with your favorite webbrowser.
 
 2. Use the map on the page to find your favorite MOL Bubi station and click its icon.
 
 3. Note the official name of the station, e.g. `1201-BAH csomópont`.
 
-4. Navigate to the https://bubi.nextbike.net/maps/nextbike-live.xml?&domains=mb URL and use the browser's find function (CTRL+F) to locate the place by its name.
+4. Navigate to the https://maps.nextbike.net/maps/nextbike-live.json?domains=bh URL and use the browser's find function (CTRL+F) to locate the place by its name.
 
 ![Locate the station by its name](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/find-place-id.png)
 
@@ -80,9 +80,9 @@ To obtain the unique identifier of the station, follow these steps:
 
 ## How it works
 
-This module periodically sends requests from the browser window of the MagicMirror Electron application to the public [NextBike API](https://bubi.nextbike.net/maps/nextbike-live.json?&domains=mb). The NextBike API is free, and it does NOT require any login or API key.
+This module periodically sends requests from the browser window of the MagicMirror Electron application to the public [NextBike API](https://maps.nextbike.net/maps/nextbike-live.json?domains=bh). The NextBike API is free, and it does NOT require any login or API key.
 
-You can see an XML example by visiting this URL: https://bubi.nextbike.net/maps/nextbike-live.xml?&domains=mb
+You can see an XML example by visiting this URL: https://maps.nextbike.net/maps/nextbike-live.xml?domains=bh
 
 ## Contribution
 

@@ -12,9 +12,9 @@ Module.register('MMM-Bubi', {
     showPlaceName: true,
     align: 'left',
     places: [
-      { id: 1758935, name: 'MOMKult' },
-      { id: 1758923, name: 'MOM Park' },
-      { id: 366538, name: 'BAH csomópont' }
+      { id: 42990755, name: 'MOMKult' },
+      { id: 42990754, name: 'MOM Park' },
+      { id: 42990729,  name: 'BAH csomópont' }      
     ]
   },
 
@@ -94,7 +94,7 @@ Module.register('MMM-Bubi', {
   _getData(onCompleteCallback) {
     const self = this;
 
-    const url = 'https://bubi.nextbike.net/maps/nextbike-live.json?&domains=mb';
+    const url = 'https://maps.nextbike.net/maps/nextbike-live.json?domains=bh';
 
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
