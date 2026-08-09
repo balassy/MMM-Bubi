@@ -95,7 +95,7 @@ Module.register('MMM-Bubi', {
   _getData(onCompleteCallback) {
     const self = this;
 
-    const url = 'https://maps.nextbike.net/maps/nextbike-live.json?domains=bh';
+    const url = 'https://core.urbansharing.com/public/api/v1/graphql?operationName=dockGroupsExtended&variables=%7B%22systemId%22%3A%22inurba-budapest%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%221ef5051c2702f0fa61818c67d38125034b5ab99e483ccf36580461070705359d%22%7D%7D';
 
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
@@ -116,17 +116,76 @@ Module.register('MMM-Bubi', {
   _processResponse(responseBody) {
     const response = JSON.parse(responseBody);
 
-    const places = response.countries[0].cities[0].places;
+    /*
+    The structure of `response` is as follows:
+    {
+      "data": {
+        "dockGroups": [
+          {
+            "id": "7468",
+            "name": "110038",
+            "title": "Kelenföld vasútállomás M (Etele tér)",
+            "state": "active",
+            "subTitle": "Kelenföld vasútállomás M (Etele tér)",
+            "enabled": true,
+            "availabilityInfo": {
+                "availableVehicles": 25,
+                "availableDocks": 16,
+                "availableVirtualDocks": 16,
+                "availablePhysicalDocks": 0,
+                "availableVehicleCategories": [
+                    {
+                        "category": "bike",
+                        "count": 5,
+                        "__typename": "VehicleCategoryAvailability"
+                    },
+                    {
+                        "category": "ebike",
+                        "count": 20,
+                        "__typename": "VehicleCategoryAvailability"
+                    }
+                ],
+                "__typename": "DockGroupAvailability"
+            },
+            "coord": {
+                "lat": 47.464501,
+                "lng": 19.023039,
+                "__typename": "Coord"
+            },
+            "__typename": "DockGroup"
+          },
+          { ... }
+        ]
+      }
+    }
+    */
+  
+
+    const docks = response.data.dockGroups.map(dockGroup => ({
+      id: dockGroup.id,
+      name: dockGroup.name,
+      title: dockGroup.title,
+      availableDocks: dockGroup.availableDocks,
+      availableBikes: dockGroup.availabilityInfo.availableVehicleCategories
+    }));
 
     this.viewModel.places = [];
 
     for (let i = 0; i < this.config.places.length; i++) {
-      const place = places.find(p => p.uid === this.config.places[i].id);
+      const dock = docks.find(d => d.id === this.config.places[i].id);
+
+      if (!dock) {
+        Log.error(this.name, `MMM-Bubi: Dock with ID ${this.config.places[i].id} not found in the response.`);
+        continue;
+      }
+
       this.viewModel.places.push({
         name: this.config.showPlaceName
-          ? this.config.places[i].name || place.name
+          ? this.config.places[i].name || dock.name
           : null,
-        numberOfBikes: place.bikes
+        numberOfBikes: dock.availableBikes.find(b => b.category === 'bike').count,
+        numberOfEBikes: dock.availableBikes.find(b => b.category === 'ebike').count,
+        numberOfDocks: dock.availableDocks
       });
     }
 
