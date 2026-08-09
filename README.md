@@ -34,7 +34,7 @@ git clone https://github.com/balassy/MMM-Bubi.git
 
 2. Add the following configuration block to the modules array in the `config/config.js` file:
 
-> **NOTE:** The configuration has been changed with the 2026 release of MOL Bubi! 
+> **NOTE:** The configuration has been changed with the 2026 release of MOL Bubi!
 
 ```js
 var config = {
@@ -66,7 +66,7 @@ var config = {
 |------------------------|-----------
 | `places`               | **REQUIRED** The list of Bubi stations to display. The unique `id` of the station is used to lookup the data from the webservice. The `name` is optional, and can be used to display a custom name for the station instead of the official name if the `showPlaceName` option is set to `true`. <br><br> **Type:** `Array<{ id: string, name: string }>` <br>**Default value:** 3 preconfigured stations
 | `showBikes`            | *Optional* Specifies whether the module should display the number of available classic bikes for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
-| `showEbikes`            | *Optional* Specifies whether the module should display the number of available electric bikes for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
+| `showEbikes`           | *Optional* Specifies whether the module should display the number of available electric bikes for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
 | `showDocks`            | *Optional* Specifies whether the module should display the number of available docks where you can park your bike after usage for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
 | `showPlaceName`        | *Optional* Specifies whether the module should display not only the number of available bikes for each station, but also the names of the stations. If the `name` property is set in the `places` array, then it will be displayed, otherwise the official names of the stations will be rendered onto the Mirror.<br><br> **Type:** `boolean` <br>**Default value:** `true`
 | `align`                | *Optional* Determines how the text is aligned within the module. Set this to `left` if the module is displayed on left side of the mirror, or to `right` if you positioned this module to the right column of the mirror.<br><br>**Type:** `string`<br>**Possible values**: `'left'` or `'right'`<br>**Default value:** `'left'`
@@ -106,16 +106,10 @@ Although for operation this module does not depend on any other module, if you w
 npm install
 ```
 
-2. Install Grunt:
+2. Run all linters:
 
 ```bash
-npm install -g grunt
-```
-
-3. Use Grunt to run all linters:
-
-```bash
-grunt
+npm run lint
 ```
 
 ## Got feedback?
