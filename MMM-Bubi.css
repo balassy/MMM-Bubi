@@ -1,5 +1,6 @@
 .MMM-Bubi table {
   width: auto !important;
+  line-height: 20px;
 }
 
 .MMM-Bubi table.align-right {
@@ -13,9 +14,19 @@
 }
 
 .MMM-Bubi .symbol-cell,
+.MMM-Bubi .space-cell,
 .MMM-Bubi .count-cell {
   padding-right: 10px;
   text-align: right;
+}
+
+.MMM-Bubi .symbol-cell {
+  padding-top: 3px;
+}
+
+.MMM-Bubi .symbol-dock-cell {
+  padding-top: 5px;
+  padding-right: 5px;
 }
 
 .MMM-Bubi .name-cell {
