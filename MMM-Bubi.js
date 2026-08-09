@@ -26,7 +26,8 @@ Module.register('MMM-Bubi', {
 
   getStyles() {
     return [
-      'MMM-Bubi.css'
+      'MMM-Bubi.css',
+      'font-awesome.css'
     ];
   },
 
