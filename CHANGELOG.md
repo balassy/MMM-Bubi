@@ -3,6 +3,10 @@
 All notable changes to this project is documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0]
+
+BREAKING CHANGE: Compatible with the new MOL Bubi platform released in July 2026. Requires updating the place IDs in `config.js`!
+
 ## [3.0.0]
 
 BREAKING CHANGE: Compatible with the new MOL Bubi platform released in May 2021. Requires updating the place IDs in `config.js`!

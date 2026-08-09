@@ -6,19 +6,19 @@ This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror
 
 By default this module displays the number of available bikes, e-bikes, free docks and the official names of the specified stations:
 
-![Default](./doc/screenshot-default.png)
+![Default](./doc/screenshot-default-2026.png)
 
 You can configure the module to display a custom (typically shorter) names for the stations:
 
-![With custom station names](./doc/screenshot-custom-place-name.png)
+![With custom station names](./doc/screenshot-custom-place-name-2026.png)
 
 If you wish, you can completely remove the station names:
 
-![With hidden station names](./doc/screenshot-no-place-name.png)
+![With hidden station names](./doc/screenshot-no-place-name-2026.png)
 
 You can selectively turn on or off the display of bikes, e-bikes and available docks. For example you can show only available bikes and e-bikes:
 
-![Showing bikes and e-bikes only](./doc/screenshot-bikes-ebikes.png)
+![Showing bikes and e-bikes only](./doc/screenshot-bikes-ebikes-2026.png)
 
 For updates, please check the [CHANGELOG](https://github.com/balassy/MMM-Bubi/blob/master/CHANGELOG.md).
 
@@ -88,7 +88,7 @@ To obtain the unique identifier of the station, follow these steps:
 
 5. On the `Response` tab use the browser's find function (CTRL+F) to locate the place by its name.
 
-![Locate the station by its name](./doc/find-place-id.png)
+![Locate the station by its name](./doc/find-place-id-2026.png)
 
 5. Find the `id` attribute in the same section, it is the unique identifier of the station.
 
