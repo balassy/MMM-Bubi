@@ -17,7 +17,7 @@ Module.register('MMM-Bubi', {
     places: [
       { id: '7438', name: 'MOMKult' },
       { id: '7437', name: 'MOM Park' },
-      { id: '7436',  name: 'BAH csomópont' }       
+      { id: '7436' }       
     ]
   },
 
@@ -113,10 +113,10 @@ Module.register('MMM-Bubi', {
           rowEl.appendChild(countElDocks);
         }
 
-        const nameEl = document.createElement('td');
-        nameEl.classList = 'dimmed small name-cell';
-        nameEl.innerText = place.name;
-        rowEl.appendChild(nameEl);
+        const titleEl = document.createElement('td');
+        titleEl.classList = 'dimmed small name-cell';
+        titleEl.innerText = place.title;
+        rowEl.appendChild(titleEl);
 
         tableEl.appendChild(rowEl);
       });
@@ -249,8 +249,8 @@ Module.register('MMM-Bubi', {
       }
 
       this.viewModel.places.push({
-        name: this.config.showPlaceName
-          ? this.config.places[i].name || dock.name
+        title: this.config.showPlaceName
+          ? this.config.places[i].name || dock.title
           : null,
         numberOfBikes: dock.availableBikes.find(b => b.category === 'bike').count,
         numberOfEbikes: dock.availableBikes.find(b => b.category === 'ebike').count,

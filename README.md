@@ -4,17 +4,21 @@ This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror
 
 ## Features
 
-By default this module displays the number of available bikes and the official names of the specified stations:
+By default this module displays the number of available bikes, e-bikes, free docks and the official names of the specified stations:
 
-![Default](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-default.png)
+![Default](./doc/screenshot-default.png)
 
 You can configure the module to display a custom (typically shorter) names for the stations:
 
-![With custom station names](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-custom-place-name.png)
+![With custom station names](./doc/screenshot-custom-place-name.png)
 
 If you wish, you can completely remove the station names:
 
-![With hidden station names](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/screenshot-no-place-name.png)
+![With hidden station names](./doc/screenshot-no-place-name.png)
+
+You can selectively turn on or off the display of bikes, e-bikes and available docks. For example you can show only available bikes and e-bikes:
+
+![Showing bikes and e-bikes only](./doc/screenshot-bikes-ebikes.png)
 
 For updates, please check the [CHANGELOG](https://github.com/balassy/MMM-Bubi/blob/master/CHANGELOG.md).
 
@@ -30,6 +34,8 @@ git clone https://github.com/balassy/MMM-Bubi.git
 
 2. Add the following configuration block to the modules array in the `config/config.js` file:
 
+> **NOTE:** The configuration has been changed with the 2026 release of MOL Bubi! 
+
 ```js
 var config = {
   modules: [
@@ -38,12 +44,15 @@ var config = {
       position: 'top_right',
       config: {
         updateInterval: 600000, // 10 minutes in milliseconds
+        showBikes: true,
+        showEbikes: true,
+        showDocks: true,
         showPlaceName: true,
         align: 'left',
         places: [
-          { id: 42990755, name: 'MOMKult' },
-          { id: 42990754, name: 'MOM Park' },
-          { id: 42990729,  name: 'BAH csomópont' }     
+          { id: '7438', name: 'MOMKult' },
+          { id: '7437', name: 'MOM Park' },
+          { id: '7436' }       
         ]
       }
     }
@@ -55,7 +64,10 @@ var config = {
 
 | Option                 | Description
 |------------------------|-----------
-| `places`               | **REQUIRED** The list of Bubi stations to display. The unique `id` of the station is used to lookup the data from the webservice. The `name` is optional, and can be used to display a custom name for the station instead of the official name if the `showPlaceName` option is set to `true`. <br><br> **Type:** `Array<{ id: number, name: string }>` <br>**Default value:** 3 preconfigured stations
+| `places`               | **REQUIRED** The list of Bubi stations to display. The unique `id` of the station is used to lookup the data from the webservice. The `name` is optional, and can be used to display a custom name for the station instead of the official name if the `showPlaceName` option is set to `true`. <br><br> **Type:** `Array<{ id: string, name: string }>` <br>**Default value:** 3 preconfigured stations
+| `showBikes`            | *Optional* Specifies whether the module should display the number of available classic bikes for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
+| `showEbikes`            | *Optional* Specifies whether the module should display the number of available electric bikes for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
+| `showDocks`            | *Optional* Specifies whether the module should display the number of available docks where you can park your bike after usage for each station. <br><br> **Type:** `boolean` <br>**Default value:** `true`
 | `showPlaceName`        | *Optional* Specifies whether the module should display not only the number of available bikes for each station, but also the names of the stations. If the `name` property is set in the `places` array, then it will be displayed, otherwise the official names of the stations will be rendered onto the Mirror.<br><br> **Type:** `boolean` <br>**Default value:** `true`
 | `align`                | *Optional* Determines how the text is aligned within the module. Set this to `left` if the module is displayed on left side of the mirror, or to `right` if you positioned this module to the right column of the mirror.<br><br>**Type:** `string`<br>**Possible values**: `'left'` or `'right'`<br>**Default value:** `'left'`
 | `updateInterval`       | *Optional* The frequency of how often the module should query the number of available bikes from the webservice. <br><br>**Type:** `int` (milliseconds) <br>**Default value:** `600000` milliseconds (10 minutes)
@@ -66,23 +78,23 @@ In the `id` property of the objects in the `places` array of the configuration s
 
 To obtain the unique identifier of the station, follow these steps:
 
-1. Navigate to the [MOL Bubi homepage](https://molbubi.hu/hu/terkep/) with your favorite webbrowser.
+1. Navigate to the [MOL Bubi map page](https://molbubi.hu/hu/allomas) with your favorite webbrowser.
 
 2. Use the map on the page to find your favorite MOL Bubi station and click its icon.
 
-3. Note the official name of the station, e.g. `1201-BAH csomópont`.
+3. Note the official name of the station, e.g. `BAH-csomópont`.
 
-4. Navigate to the https://maps.nextbike.net/maps/nextbike-live.json?domains=bh URL and use the browser's find function (CTRL+F) to locate the place by its name.
+4. Open your browser's Developer Tools (F12), switch to the `Network` tab and find the call to `https://core.urbansharing.com/public/api/v1/graphql?operationName=dockGroupsExtended`
 
-![Locate the station by its name](https://raw.githubusercontent.com/balassy/MMM-Bubi/master/doc/find-place-id.png)
+5. On the `Response` tab use the browser's find function (CTRL+F) to locate the place by its name.
 
-5. Find the `uid` attribute in the same row, it is the unique identifier of the station.
+![Locate the station by its name](./doc/find-place-id.png)
+
+5. Find the `id` attribute in the same section, it is the unique identifier of the station.
 
 ## How it works
 
-This module periodically sends requests from the browser window of the MagicMirror Electron application to the public [NextBike API](https://maps.nextbike.net/maps/nextbike-live.json?domains=bh). The NextBike API is free, and it does NOT require any login or API key.
-
-You can see an XML example by visiting this URL: https://maps.nextbike.net/maps/nextbike-live.xml?domains=bh
+This module periodically sends requests from the browser window of the MagicMirror Electron application to the public UrbanSharing API just like how the official map page does. The API is free, and it does NOT require any login or API key.
 
 ## Contribution
 
