@@ -9,12 +9,15 @@
 Module.register('MMM-Bubi', {
   defaults: {
     updateInterval: 600000,
+    showBikes: true,
+    showEbikes: true,
+    showDocks: true,
     showPlaceName: true,
     align: 'left',
     places: [
-      { id: 42990755, name: 'MOMKult' },
-      { id: 42990754, name: 'MOM Park' },
-      { id: 42990729,  name: 'BAH csomópont' }      
+      { id: '7438', name: 'MOMKult' },
+      { id: '7437', name: 'MOM Park' },
+      { id: '7436',  name: 'BAH csomópont' }       
     ]
   },
 
@@ -60,14 +63,55 @@ Module.register('MMM-Bubi', {
       this.viewModel.places.forEach((place) => {
         const rowEl = document.createElement('tr');
 
-        const symbolEl = document.createElement('td');
-        symbolEl.classList = 'fa fa-bicycle dimmed symbol-cell';
-        rowEl.appendChild(symbolEl);
+        if (this.config.showBikes) {
+          const symbolBikeEl = document.createElement('td');
+          symbolBikeEl.classList = 'dimmed symbol-cell';
 
-        const countEl = document.createElement('td');
-        countEl.classList = 'count-cell';
-        countEl.innerText = place.numberOfBikes;
-        rowEl.appendChild(countEl);
+          const svgBikeEl = this._getSvgElement('bike');
+          symbolBikeEl.appendChild(svgBikeEl);
+          rowEl.appendChild(symbolBikeEl);
+
+          const countEl = document.createElement('td');
+          countEl.classList = 'count-cell';
+          countEl.innerText = place.numberOfBikes;
+          rowEl.appendChild(countEl);
+          
+          const spaceEl = document.createElement('td');
+          spaceEl.classList = 'space-cell';
+          rowEl.appendChild(spaceEl);
+        }
+
+        if (this.config.showEbikes) {
+          const symbolEbikeEl = document.createElement('td');
+          symbolEbikeEl.classList = 'dimmed symbol-cell';
+
+          const svgEbikeEl = this._getSvgElement('ebike');
+          symbolEbikeEl.appendChild(svgEbikeEl);
+          rowEl.appendChild(symbolEbikeEl);
+
+          const countElEbike = document.createElement('td');
+          countElEbike.classList = 'count-cell';
+          countElEbike.innerText = place.numberOfEbikes;
+          rowEl.appendChild(countElEbike);
+
+          const spaceEl2 = document.createElement('td');
+          spaceEl2.classList = 'space-cell';
+          rowEl.appendChild(spaceEl2);
+        }
+
+        if (this.config.showDocks) {
+          const symbolDocksEl = document.createElement('td');
+          symbolDocksEl.classList = 'dimmed symbol-cell symbol-dock-cell';
+
+          const svgDocksEl = this._getSvgElement('docks');
+          symbolDocksEl.appendChild(svgDocksEl);
+          rowEl.appendChild(symbolDocksEl);
+
+          const countElDocks = document.createElement('td');
+          countElDocks.classList = 'count-cell';
+          countElDocks.innerText = place.numberOfDocks;
+          rowEl.appendChild(countElDocks);
+        }
 
         const nameEl = document.createElement('td');
         nameEl.classList = 'dimmed small name-cell';
@@ -90,6 +134,31 @@ Module.register('MMM-Bubi', {
     }
 
     return wrapper;
+  },
+
+  _getSvgElement(iconName) {
+    const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgEl.setAttribute('viewBox', '0 0  24 24');
+    svgEl.setAttribute('width', '1em');
+    svgEl.setAttribute('height', '1em');
+    svgEl.setAttribute('fill', 'currentColor');
+
+    const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pathEl.setAttribute('d', this._getSvgPath(iconName));
+    svgEl.appendChild(pathEl);
+
+    return svgEl;
+  },
+
+  _getSvgPath(iconName) {
+    switch (iconName) {
+      case 'bike':
+        return 'M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2M5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5m0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5m5.8-10 2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h2v-6.2zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5m0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5';
+      case 'ebike':
+        return 'M19 7h-.82l-1.7-4.68C16.19 1.53 15.44 1 14.6 1H12v2h2.6l1.46 4h-4.81l-.36-1H12V4H7v2h1.75l1.82 5H9.9c-.44-2.23-2.31-3.88-4.65-3.99C2.45 6.87 0 9.2 0 12s2.2 5 5 5c2.46 0 4.45-1.69 4.9-4h4.2c.44 2.23 2.31 3.88 4.65 3.99 2.8.13 5.25-2.19 5.25-5C24 9.2 21.8 7 19 7M7.82 13c-.4 1.17-1.49 2-2.82 2-1.68 0-3-1.32-3-3s1.32-3 3-3c1.33 0 2.42.83 2.82 2H5v2zm6.28-2h-1.4l-.73-2H15c-.44.58-.76 1.25-.9 2m4.9 4c-1.68 0-3-1.32-3-3 0-.93.41-1.73 1.05-2.28l.96 2.64 1.88-.68-.97-2.67c.02 0 .05-.01.08-.01 1.68 0 3 1.32 3 3s-1.32 3-3 3m-8 5H7l6 3v-2h4l-6-3z';
+      case 'docks':
+        return 'M13 3H6v18h4v-6h3c3.31 0 6-2.69 6-6s-2.69-6-6-6m.2 8H10V7h3.2c1.1 0 2 .9 2 2s-.9 2-2 2';
+    };
   },
 
   _getData(onCompleteCallback) {
@@ -165,7 +234,7 @@ Module.register('MMM-Bubi', {
       id: dockGroup.id,
       name: dockGroup.name,
       title: dockGroup.title,
-      availableDocks: dockGroup.availableDocks,
+      availableDocks: dockGroup.availabilityInfo.availableDocks,
       availableBikes: dockGroup.availabilityInfo.availableVehicleCategories
     }));
 
@@ -184,7 +253,7 @@ Module.register('MMM-Bubi', {
           ? this.config.places[i].name || dock.name
           : null,
         numberOfBikes: dock.availableBikes.find(b => b.category === 'bike').count,
-        numberOfEBikes: dock.availableBikes.find(b => b.category === 'ebike').count,
+        numberOfEbikes: dock.availableBikes.find(b => b.category === 'ebike').count,
         numberOfDocks: dock.availableDocks
       });
     }
